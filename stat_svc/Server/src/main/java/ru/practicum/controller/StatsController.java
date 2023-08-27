@@ -24,6 +24,7 @@ public class StatsController {
         statsService.saveHit(hitDto);
         return new ResponseEntity<>("Запрос сохранен", HttpStatus.CREATED);
     }
+
     @GetMapping("/stats")
     public List<ViewStats> getStats(@RequestParam(name = "start") String start,
                                     @RequestParam(name = "end") String end,
@@ -32,6 +33,7 @@ public class StatsController {
         log.info("Запрос статистики по адресам {}", uris);
         return statsService.getStats(start, end, uris, unique);
     }
+
     @GetMapping("/hits")
     public List<EndpointHitDto> getAllHits() {
         log.info("Запрос полной статистики");
