@@ -22,3 +22,27 @@ services:
       - POSTGRES_DB=ewmStatDB
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+
+  ewm-service:
+    build: ./main_svc
+    image: java-explore-with-me-main-srv
+    container_name: ewm-main-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ewm-db
+      - stats-server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-main-db:5432/ewmMainDB
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+
+  ewm-db:
+    image: postgres:14-alpine
+    container_name: ewm-main-db
+    ports:
+      - "7654:5432"
+    environment:
+      - POSTGRES_DB=ewmMainDB
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
