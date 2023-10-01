@@ -11,7 +11,6 @@ import ru.practicum.dto.RequestParamDto;
 import ru.practicum.service.StatsService;
 
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
