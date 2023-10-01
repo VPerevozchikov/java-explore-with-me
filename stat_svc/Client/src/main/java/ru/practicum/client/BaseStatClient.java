@@ -15,7 +15,7 @@ import java.util.Map;
 public class BaseStatClient {
     protected static final RestTemplate rest = new RestTemplateBuilder()
             //.uriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:9090"))
-            .uriTemplateHandler(new DefaultUriBuilderFactory("ewm-stat-server:9090"))
+            .uriTemplateHandler(new DefaultUriBuilderFactory("http://ewm-stat-server:9090"))
             .build();
 
     private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
