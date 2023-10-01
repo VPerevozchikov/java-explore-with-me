@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BaseStatClient {
-    protected static RestTemplate rest = new RestTemplateBuilder()
+    protected static final RestTemplate rest = new RestTemplateBuilder()
             //.uriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:9090"))
             .uriTemplateHandler(new DefaultUriBuilderFactory("ewm-stat-server:9090"))
             .build();
