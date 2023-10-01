@@ -6,10 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.dto.ViewStats;
+import ru.practicum.dto.EndpointStats;
+import ru.practicum.dto.RequestParamDto;
 import ru.practicum.service.StatsService;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -26,12 +28,13 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStats> getStats(@RequestParam(name = "start") String start,
-                                    @RequestParam(name = "end") String end,
-                                    @RequestParam(name = "uris", required = false) String[] uris,
-                                    @RequestParam(name = "unique", defaultValue = "false") boolean unique) {
+    public List<EndpointStats> getStats(@RequestParam(name = "start") String start,
+                                        @RequestParam(name = "end") String end,
+                                        @RequestParam(name = "uris", required = false) String[] uris,
+                                        @RequestParam(name = "unique", defaultValue = "false") boolean unique) {
         log.info("Запрос статистики по адресам {}", uris);
-        return statsService.getStats(start, end, uris, unique);
+        RequestParamDto requestDto = new RequestParamDto(start, end, uris, unique);
+        return statsService.getStats(requestDto);
     }
 
     @GetMapping("/hits")
