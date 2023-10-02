@@ -1,21 +1,22 @@
 package ru.practicum.client;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.dto.ViewStats;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import ru.practicum.dto.EndpointStats;
 
 import java.util.List;
 import java.util.Map;
 
 public class BaseStatClient {
-    protected final RestTemplate rest;
-
-    public BaseStatClient(RestTemplate rest) {
-        this.rest = rest;
-    }
+    protected static final RestTemplate rest = new RestTemplateBuilder()
+            //.uriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:9090"))
+            .uriTemplateHandler(new DefaultUriBuilderFactory("http://ewm-stat-server:9090"))
+            .build();
 
     private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
         if (response.getStatusCode().is2xxSuccessful()) {
@@ -31,11 +32,11 @@ public class BaseStatClient {
         return responseBuilder.build();
     }
 
-    protected <T> ResponseEntity<String> post(String path, @Nullable Map<String, Object> parameters, T body) {
+    protected static <T> ResponseEntity<String> post(String path, @Nullable Map<String, Object> parameters, T body) {
         return makeAndSendPostHitRequest(HttpMethod.POST, path, parameters, body);
     }
 
-    private <T> ResponseEntity<String> makeAndSendPostHitRequest(HttpMethod method, String path, @Nullable Map<String, Object> parameters, /*Nullable */T body) {
+    private static <T> ResponseEntity<String> makeAndSendPostHitRequest(HttpMethod method, String path, @Nullable Map<String, Object> parameters, /*Nullable */T body) {
         HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders());
 
         ResponseEntity<String> ewmServerResponse;
@@ -51,20 +52,20 @@ public class BaseStatClient {
         return ewmServerResponse;
     }
 
-    protected ResponseEntity<List<ViewStats>> get(String path, @Nullable Map<String, Object> parameters) {
+    protected static ResponseEntity<List<EndpointStats>> get(String path, @Nullable Map<String, Object> parameters) {
         return makeAndSendGetStatsRequest(HttpMethod.GET, path, parameters, null);
     }
 
-    private <T> ResponseEntity<List<ViewStats>> makeAndSendGetStatsRequest(HttpMethod method, String path, @Nullable Map<String, Object> parameters, @Nullable T body) {
+    private static <T> ResponseEntity<List<EndpointStats>> makeAndSendGetStatsRequest(HttpMethod method, String path, @Nullable Map<String, Object> parameters, @Nullable T body) {
         HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders());
 
-        ResponseEntity<List<ViewStats>> ewmServerResponse;
+        ResponseEntity<List<EndpointStats>> ewmServerResponse;
         try {
             if (parameters != null) {
-                ewmServerResponse = rest.exchange(path, method, requestEntity, new ParameterizedTypeReference<List<ViewStats>>() {
+                ewmServerResponse = rest.exchange(path, method, requestEntity, new ParameterizedTypeReference<List<EndpointStats>>() {
                 }, parameters);
             } else {
-                ewmServerResponse = rest.exchange(path, method, requestEntity, new ParameterizedTypeReference<List<ViewStats>>() {
+                ewmServerResponse = rest.exchange(path, method, requestEntity, new ParameterizedTypeReference<List<EndpointStats>>() {
                 });
             }
         } catch (HttpStatusCodeException e) {
@@ -73,7 +74,7 @@ public class BaseStatClient {
         return ewmServerResponse;
     }
 
-    private HttpHeaders defaultHeaders() {
+    private static HttpHeaders defaultHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));

@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.EndpointHitMapper;
-import ru.practicum.dto.ViewStats;
+import ru.practicum.dto.EndpointStats;
+import ru.practicum.dto.RequestParamDto;
 import ru.practicum.repository.StatsJpaRepository;
 
 import java.net.URLDecoder;
@@ -35,9 +36,9 @@ public class StatsService {
                 .collect(Collectors.toList());
     }
 
-    public List<ViewStats> getStats(String startFromQuery, String endFromQuery, String[] uris, boolean unique) {
-        String startDecoded = URLDecoder.decode(startFromQuery, StandardCharsets.UTF_8);
-        String endDecoded = URLDecoder.decode(endFromQuery, StandardCharsets.UTF_8);
+    public List<EndpointStats> getStats(RequestParamDto requestParamDto) {
+        String startDecoded = URLDecoder.decode(requestParamDto.getStart(), StandardCharsets.UTF_8);
+        String endDecoded = URLDecoder.decode(requestParamDto.getEnd(), StandardCharsets.UTF_8);
 
         LocalDateTime start = LocalDateTime.parse(startDecoded, TIME_FORMAT);
         LocalDateTime end = LocalDateTime.parse(endDecoded, TIME_FORMAT);
@@ -46,7 +47,9 @@ public class StatsService {
             throw new RuntimeException("Ошибка: время начала задано позже времени окончания.");
         }
 
-        if (unique) {
+        String[] uris = requestParamDto.getUris();
+
+        if (requestParamDto.isUnique()) {
             if (uris == null) {
                 return statsJpaRepository.getStatsUnique(start, end);
             } else {
