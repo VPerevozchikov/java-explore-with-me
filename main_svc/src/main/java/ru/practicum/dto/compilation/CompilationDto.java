@@ -6,6 +6,7 @@ import ru.practicum.dto.event.EventShortDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ public class CompilationDto {
     @NotNull
     private boolean pinned;
     @NotBlank
+    @Size(min = 1, max = 50)
     private String title;
     @NotNull
     private Set<EventShortDto> events = new HashSet<>();

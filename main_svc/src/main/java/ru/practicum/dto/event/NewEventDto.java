@@ -20,6 +20,7 @@ public class NewEventDto {
     @Size(min = 20, max = 7000)
     private String description;
     @NotBlank
+    @Size(min = 1, max = 120)
     private String eventDate;
     @NotNull
     private Location location;
