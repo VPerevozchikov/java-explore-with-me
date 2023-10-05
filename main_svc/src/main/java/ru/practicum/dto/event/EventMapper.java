@@ -4,13 +4,11 @@ import ru.practicum.dto.category.CategoryMapper;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.user.UserMapper;
 import ru.practicum.model.Category;
-import ru.practicum.model.Compilation;
 import ru.practicum.model.Event;
 import ru.practicum.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
 import java.util.List;
 
 public class EventMapper {
