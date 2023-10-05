@@ -62,9 +62,6 @@ public class Event {
     @Column(name = "title")
     private String title;
 
-    @ManyToMany(mappedBy = "events")
-    private Set<Compilation> compilations;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
