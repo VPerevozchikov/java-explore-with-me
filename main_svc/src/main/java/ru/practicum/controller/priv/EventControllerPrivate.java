@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.dto.event.NewEventDto;
-import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.event.*;
 import ru.practicum.dto.participationRequest.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.participationRequest.EventRequestStatusUpdateResult;
 import ru.practicum.dto.participationRequest.ParticipationRequestDto;
@@ -28,7 +25,7 @@ public class EventControllerPrivate {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED) //201
+    @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto postEvent(@PathVariable(name = "userId") int userId,
                                   @Valid @RequestBody NewEventDto newEventDto) {
         EventFullDto eventDto = eventService.createEvent(newEventDto, userId);
@@ -37,7 +34,7 @@ public class EventControllerPrivate {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK) //200
+    @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getEventsByUser(@PathVariable(name = "userId") int userId,
                                                @RequestParam(name = "from", defaultValue = "0") int from,
                                                @RequestParam(name = "size", defaultValue = "10") int size) {
@@ -47,16 +44,16 @@ public class EventControllerPrivate {
     }
 
     @GetMapping("/{eventId}")
-    @ResponseStatus(HttpStatus.OK) //200
-    public EventFullDto getEventByUserAndId(@PathVariable(name = "userId") int userId,
-                                            @PathVariable(name = "eventId") int eventId) {
-        EventFullDto eventFullDto = eventService.getByUserAndId(userId, eventId);
+    @ResponseStatus(HttpStatus.OK)
+    public EventFullDtoWithComments getEventByUserAndId(@PathVariable(name = "userId") int userId,
+                                                        @PathVariable(name = "eventId") int eventId) {
+        EventFullDtoWithComments eventFullDto = eventService.getByUserAndId(userId, eventId);
         log.info("Получено событие с Id={} , добавленное пользователем с id={}", eventId, userId);
         return eventFullDto;
     }
 
     @PatchMapping("/{eventId}")
-    @ResponseStatus(HttpStatus.OK) //200
+    @ResponseStatus(HttpStatus.OK)
     public EventFullDto patchEvent(@PathVariable(name = "userId") int userId,
                                    @PathVariable(name = "eventId") int eventId,
                                    @Valid @RequestBody UpdateEventUserRequest updateRequest) {
@@ -66,21 +63,23 @@ public class EventControllerPrivate {
     }
 
     @GetMapping("/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK) //200
+    @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getParticipationInfo(@PathVariable(name = "userId") int userId,
                                                               @PathVariable(name = "eventId") int eventId) {
         List<ParticipationRequestDto> partRequestDtoList = eventService.getParticipationInfo(userId, eventId);
-        log.info("Получена информация о запросах на учатсие в событии с Id={} , добавленное пользователем с id={}", eventId, userId);
+        log.info("Получена информация о запросах на учатсие в событии с Id={} , добавленное пользователем с id={}",
+                eventId, userId);
         return partRequestDtoList;
     }
 
     @PatchMapping("/{eventId}/requests")
-    @ResponseStatus(HttpStatus.OK) //200
+    @ResponseStatus(HttpStatus.OK)
     public EventRequestStatusUpdateResult patchEventStatus(@PathVariable(name = "userId") int userId,
                                                            @PathVariable(name = "eventId") int eventId,
                                                            @RequestBody EventRequestStatusUpdateRequest statusUpdateRequest) {
         EventRequestStatusUpdateResult updateStatusResult = eventService.updateStatus(userId, eventId, statusUpdateRequest);
-        log.info("Обновлен статус события с Id={} , добавленное пользователем с id={}. Статус = {}", eventId, userId, statusUpdateRequest.getStatus().toString());
+        log.info("Обновлен статус события с Id={} , добавленное пользователем с id={}. Статус = {}",
+                eventId, userId, statusUpdateRequest.getStatus().toString());
         return updateStatusResult;
     }
 }

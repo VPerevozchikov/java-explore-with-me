@@ -1,15 +1,15 @@
 package ru.practicum.dto.event;
 
 import ru.practicum.dto.category.CategoryMapper;
+import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.user.UserMapper;
 import ru.practicum.model.Category;
-import ru.practicum.model.Compilation;
 import ru.practicum.model.Event;
 import ru.practicum.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
+import java.util.List;
 
 public class EventMapper {
 
@@ -31,7 +31,6 @@ public class EventMapper {
         event.setPublishedOn(LocalDateTime.now());
         event.setRequestModeration(newEventDto.isRequestModeration());
         event.setTitle(newEventDto.getTitle());
-        event.setCompilations(new HashSet<Compilation>());
 
         return event;
     }
@@ -55,7 +54,6 @@ public class EventMapper {
         event.setRequestModeration(eventFullDto.isRequestModeration());
         event.setState(eventFullDto.getState());
         event.setTitle(eventFullDto.getTitle());
-        event.setCompilations(new HashSet<Compilation>());
 
         return event;
     }
@@ -95,6 +93,30 @@ public class EventMapper {
         eventFullDto.setState(event.getState());
         eventFullDto.setTitle(event.getTitle());
         eventFullDto.setViews(views);
+
+        return eventFullDto;
+    }
+
+    public static EventFullDtoWithComments toFullDtoWithComments(Event event, long views, List<CommentDto> comments) {
+        EventFullDtoWithComments eventFullDto = new EventFullDtoWithComments();
+
+        eventFullDto.setId(event.getId());
+        eventFullDto.setAnnotation(event.getAnnotation());
+        eventFullDto.setCategory(CategoryMapper.toDto(event.getCategory()));
+        eventFullDto.setConfirmedRequests(event.getConfirmedRequests());
+        eventFullDto.setCreatedOn(event.getCreatedOn().format(TIME_FORMAT));
+        eventFullDto.setDescription(event.getDescription());
+        eventFullDto.setEventDate(event.getEventDate().format(TIME_FORMAT));
+        eventFullDto.setInitiator(UserMapper.toShortDto(event.getInitiator()));
+        eventFullDto.setLocation(event.getLocation());
+        eventFullDto.setPaid((event.isPaid()));
+        eventFullDto.setParticipantLimit(event.getParticipantLimit());
+        eventFullDto.setPublishedOn(event.getPublishedOn().format(TIME_FORMAT));
+        eventFullDto.setRequestModeration(event.isRequestModeration());
+        eventFullDto.setState(event.getState());
+        eventFullDto.setTitle(event.getTitle());
+        eventFullDto.setViews(views);
+        eventFullDto.setComments(comments);
 
         return eventFullDto;
     }

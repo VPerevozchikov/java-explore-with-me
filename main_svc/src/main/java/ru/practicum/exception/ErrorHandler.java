@@ -29,7 +29,7 @@ public class ErrorHandler {
         apiError.setTimeStamp(LocalDateTime.now().format(TIME_FORMAT));
         apiError.setStatus(HttpStatus.BAD_REQUEST.name());
         apiError.setMessage(ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST); //400
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ElementNotFoundException.class, NoSuchElementException.class})
@@ -45,7 +45,7 @@ public class ErrorHandler {
         apiError.setTimeStamp(LocalDateTime.now().format(TIME_FORMAT));
         apiError.setStatus(HttpStatus.NOT_FOUND.name());
         apiError.setMessage(ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND); //404
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AlreadyExistException.class)
@@ -61,7 +61,7 @@ public class ErrorHandler {
         apiError.setTimeStamp(LocalDateTime.now().format(TIME_FORMAT));
         apiError.setStatus(HttpStatus.CONFLICT.name());
         apiError.setMessage(ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT); //409
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({CreateConditionException.class, DataConflictException.class})

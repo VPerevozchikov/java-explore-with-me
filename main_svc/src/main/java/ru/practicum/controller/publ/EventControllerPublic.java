@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.EventFullDtoWithComments;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.service.EventService;
 
@@ -43,9 +43,9 @@ public class EventControllerPublic {
 
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEvent(@PathVariable(name = "eventId") int eventId,
-                                 HttpServletRequest request) {
-        EventFullDto eventDto = eventService.getEventByIdWithStats(eventId, request);
+    public EventFullDtoWithComments getEvent(@PathVariable(name = "eventId") int eventId,
+                                             HttpServletRequest request) {
+        EventFullDtoWithComments eventDto = eventService.getEventByIdWithStats(eventId, request);
         log.info("Получено событие id={}, запрос сохранен в сервисе статистики", eventId);
         return eventDto;
     }

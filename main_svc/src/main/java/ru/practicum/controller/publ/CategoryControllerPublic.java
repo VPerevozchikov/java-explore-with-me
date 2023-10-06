@@ -22,7 +22,7 @@ public class CategoryControllerPublic {
     }
 
     @GetMapping()
-    @ResponseStatus(HttpStatus.OK) //200
+    @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> getCategories(@RequestParam(name = "from", defaultValue = "0") int from,
                                            @RequestParam(name = "size", defaultValue = "10") int size) {
         List<CategoryDto> categoryDtos = categoryService.getAllCategories(from, size);
@@ -31,7 +31,7 @@ public class CategoryControllerPublic {
     }
 
     @GetMapping("/{categoryId}")
-    @ResponseStatus(HttpStatus.OK) //200
+    @ResponseStatus(HttpStatus.OK)
     public CategoryDto getCategory(@PathVariable int categoryId) {
         CategoryDto categoryDto = categoryService.getCategoryById(categoryId);
         log.info("Получена категория с id={} через Публичный контроллер", categoryId);

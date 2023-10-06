@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "events", schema = "public")
@@ -61,9 +60,6 @@ public class Event {
 
     @Column(name = "title")
     private String title;
-
-    @ManyToMany(mappedBy = "events")
-    private Set<Compilation> compilations;
 
     @Override
     public boolean equals(Object o) {
